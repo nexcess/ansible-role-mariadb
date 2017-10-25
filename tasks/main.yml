@@ -7,8 +7,8 @@
 
 - name: Remove Existing MariaDB Install
   yum:
-   name="{{ item }}"
-   state="absent"
+   name: "{{ item }}"
+   state: "absent"
   with_items:
    - "MariaDB"
    - "MariaDB-server"
@@ -17,42 +17,42 @@
 
 - name: Allow MariaDB Port(s) In SELinux
   seboolean:
-    name="mysql_connect_any"
-    state="true"
-    persistent="yes"
+    name: "mysql_connect_any"
+    state: "true"
+    persistent: "yes"
 
 - name: Explicitly Allow mysql_extra_port
   seport:
-    ports="{{ mysql_extra_port }}"
-    proto="tcp"
-    setype="mysqld_port_t"
-    state="present"
+    ports: "{{ mysql_extra_port }}"
+    proto: "tcp"
+    setype: "mysqld_port_t"
+    state: "present"
 
 - name: Creates PID Directory
   file:
-    path="/var/run/mysql"
-    state="directory"
-    owner="mysql"
-    group="mysql"
-    mode=0755
-    recurse="yes"
+    path: "/var/run/mysql"
+    state: "directory"
+    owner: "mysql"
+    group: "mysql"
+    mode: 0755
+    recurse: "yes"
 
 - name: Flush Yum Cache
   command: yum clean all
 
 - name: Add MariaDB Repo
   template:
-    src="mariadb_centos.repo.j2"
-    dest="/etc/yum.repos.d/mariadb.repo"
-    owner="root"
-    group="root"
-    mode=0644
+    src: "mariadb_centos.repo.j2"
+    dest: "/etc/yum.repos.d/mariadb.repo"
+    owner: "root"
+    group: "root"
+    mode: 0644
 
 - name: Install MariaDB
   yum:
-    name="{{ item }}"
-    enablerepo="mariadb"
-    state="latest"
+    name: "{{ item }}"
+    enablerepo: "mariadb"
+    state: "latest"
   with_items:
     - "MariaDB-server"
     - "MariaDB-client"
@@ -60,19 +60,19 @@
 
 - name: Set Configuration File
   template:
-    src="my.cnf.j2"
-    dest="/etc/my.cnf.d/server.cnf"
-    owner="root"
-    group="root"
-    mode=0644
+    src: "my.cnf.j2"
+    dest: "/etc/my.cnf.d/server.cnf"
+    owner: "root"
+    group: "root"
+    mode: 0644
   notify: restart mariadb
 
 - name: Enable MariaDB
   systemd:
-    name="mariadb"
-    state="started"
-    enabled="yes"
-    masked="no"
+    name: "mariadb"
+    state: "started"
+    enabled: "yes"
+    masked: "no"
 
 - name: MySQL Upgrade
   shell: mysql_upgrade
