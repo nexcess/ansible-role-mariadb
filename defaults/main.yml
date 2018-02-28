@@ -46,3 +46,4 @@ mysql_innodb_flush_method: "O_DIRECT"
 mysql_innodb_ft_min_token_size: 2
 mysql_innodb_stats_on_metadata: "OFF"
 mysql_log_error: "/var/log/mysqld.log"
+mysql_skip_name_resolve: 1
