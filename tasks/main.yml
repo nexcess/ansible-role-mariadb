@@ -64,6 +64,14 @@
     group="mysql"
     mode=0755
 
+- name: Creates MySQL Error Log File
+  file:
+    path="{{ mysql_log_error }}"
+    state="touch"
+    owner="mysql"
+    group="mysql"
+    mode=0640
+
 - name: Set Configuration File
   template:
     src="my.cnf.j2"
