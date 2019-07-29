@@ -64,6 +64,11 @@
     group="mysql"
     mode=0755
 
+- name: Check for existence of {{ mysql_log_error }}
+  stat:
+    path="{{ mysql_log_error }}"
+  register: stat_error_log
+
 - name: Creates MySQL Error Log File
   file:
     path="{{ mysql_log_error }}"
@@ -71,6 +76,7 @@
     owner="mysql"
     group="mysql"
     mode=0640
+  when: not stat_error_log.stat.exists
 
 - name: Set Configuration File
   template:
