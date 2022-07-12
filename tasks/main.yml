@@ -97,6 +97,15 @@
 - name: Patch authentication for interworx
   command: mysql -u root -e "ALTER USER root@localhost IDENTIFIED VIA mysql_native_password USING PASSWORD('');"
 
+- name: See if login is available for 127.0.0.1
+  command: mysql -u root -h 127.0.0.1 -e ";"
+  register: mysql_loopback
+  failed_when: mysql_loopback.rc > 1
+
+- name: Create root user for 127.0.0.1
+  command: mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO root@127.0.0.1 IDENTIFIED VIA mysql_native_password USING PASSWORD('') WITH GRANT OPTION;"
+  when: mysql_loopback.rc == 1
+
 - name: MySQL Upgrade
   shell: mysql_upgrade
   async: 45
