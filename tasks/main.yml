@@ -94,8 +94,14 @@
     enabled="yes"
     masked="no"
 
+- name: Verify no password localhost login works
+  command: mysql -u root -e ";"
+  register: mysql_localhost
+  failed_when: mysql_localhost.rc > 1
+
 - name: Patch authentication for interworx
   command: mysql -u root -e "ALTER USER root@localhost IDENTIFIED VIA mysql_native_password USING PASSWORD('');"
+  when: mysql_localhost.rc == 0
 
 - name: See if login is available for 127.0.0.1
   command: mysql -u root -h 127.0.0.1 -e ";"
