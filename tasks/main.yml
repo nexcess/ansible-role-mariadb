@@ -95,7 +95,7 @@
     masked="no"
 
 - name: Verify no password localhost login works
-  command: mysql -u root -e ";"
+  command: mysql -u root --password="" -e ";"
   register: mysql_localhost
   failed_when: mysql_localhost.rc > 1
 
