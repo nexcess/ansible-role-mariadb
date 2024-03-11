@@ -18,7 +18,6 @@
   with_items:
    - "MariaDB"
    - "MariaDB-server"
-   - "mysql-libs"
 
 - name: Allow MariaDB Port(s) In SELinux
   seboolean:
@@ -54,7 +53,6 @@
   with_items:
     - "MariaDB-server"
     - "MariaDB-client"
-    - "mysql-libs"
 
 - name: Creates PID Directory
   file:
